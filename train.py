@@ -5,30 +5,12 @@ import numpy as np
 from sklearn.metrics import mean_squared_error
 import joblib
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
 from azureml.core.run import Run
+from argparse import ArgumentParser
+from azureml.data.dataset_factory import TabularDatasetFactory
+from azureml.core import Workspace,Dataset
 
-dataset=pd.read_csv('./heart_failure_clinical_records_dataset.csv')
-
-# Preview of  first five rows
-dataset.head()
-
-# Exploring data
-dataset.describe()
-
-# Data columns
-dataset.columns = ['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes', 'ejection_fraction', 'high_blood_pressure', 'platelets', 'serum_creatinine', 'serum_sodium', 'sex', 'smoking', 'time', 'DEATH_EVENT']
-x = dataset[['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes', 'ejection_fraction', 'high_blood_pressure', 'platelets', 'serum_creatinine', 'serum_sodium', 'sex', 'smoking', 'time']]
-y = dataset[['DEATH_EVENT']]
-
-# Split data into train and test sets.
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
-
-data_train_test = {"train_set": {"X": x_train, "y": y_train},
-        "test_set": {"X": x_test, "y": y_test}}
-
-run = Run.get_context()
 
 def main():
     # Add arguments to script
@@ -39,7 +21,14 @@ def main():
 
     args = parser.parse_args()
     
+    #create Tabular Dataset using TabularDatasetFactory
+    path_url="https://raw.githubusercontent.com/Ankita03-dell/AZMLND_Capstone_Trial1/main/heart_failure_clinical_records_dataset.csv"
+    ds=TabularDatasetFactory.from_delimited_files(path=path_url)
     
+    #Split data into train and test sets
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33,random_state=0)  
+        
+    run = Run.get_context()
     run.log("Regularization Strength:", np.float(args.C))
     run.log("Max iterations:", np.int(args.max_iter))
 
