@@ -12,6 +12,15 @@ from azureml.data.dataset_factory import TabularDatasetFactory
 from azureml.core import Workspace,Dataset
 
 
+dataset=pd.read_csv('heart_failure_clinical_records_dataset.csv')
+x = dataset[['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes', 'ejection_fraction', 'high_blood_pressure', 'platelets', 'serum_creatinine', 'serum_sodium', 'sex', 'smoking', 'time']]
+y = dataset[['DEATH_EVENT']]
+
+#Split data into train and test sets
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33,random_state=0)  
+        
+run = Run.get_context()
+
 def main():
     # Add arguments to script
     parser = argparse.ArgumentParser()
@@ -25,16 +34,16 @@ def main():
     #create Tabular Dataset using TabularDatasetFactory
     #path_url="https://raw.githubusercontent.com/Ankita03-dell/AZMLND_Capstone_Trial1/main/heart_failure_clinical_records_dataset.csv"
     #ds=TabularDatasetFactory.from_delimited_files(path=path_url)
-    dataset=pd.read_csv('heart_failure_clinical_records_dataset.csv')
-    x = dataset[['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes', 'ejection_fraction', 'high_blood_pressure', 'platelets', 'serum_creatinine', 'serum_sodium', 'sex', 'smoking', 'time']]
-    y = dataset[['DEATH_EVENT']]
+    #dataset=pd.read_csv('heart_failure_clinical_records_dataset.csv')
+    #x = dataset[['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes', 'ejection_fraction', 'high_blood_pressure', 'platelets', 'serum_creatinine', 'serum_sodium', 'sex', 'smoking', 'time']]
+    #y = dataset[['DEATH_EVENT']]
     #x= ds.drop('DEATH_EVENT', axis=1)
     #y= ds['DEATH_EVENT']
  
     #Split data into train and test sets
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33,random_state=0)  
+    #x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33,random_state=0)  
         
-    run = Run.get_context()
+    #run = Run.get_context()
     run.log("Regularization Strength:", np.float(args.C))
     run.log("Max iterations:", np.int(args.max_iter))
 
