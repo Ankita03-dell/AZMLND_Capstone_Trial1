@@ -9,7 +9,7 @@ from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
 from azureml.core.run import Run
 
-dataset=pd.read_csv(heart_failure_clinical_records_dataset.csv)
+dataset=pd.read_csv('heart_failure_clinical_records_dataset.csv')
 
 # Preview of  first five rows
 dataset.head()
