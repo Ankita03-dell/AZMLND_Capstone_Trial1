@@ -23,9 +23,9 @@ def main():
     
     #ds = pd.read_csv('./heart_failure_clinical_records_dataset.csv')
     #create Tabular Dataset using TabularDatasetFactory
-    path_url="https://raw.githubusercontent.com/Ankita03-dell/AZMLND_Capstone_Trial1/main/heart_failure_clinical_records_dataset.csv"
-    ds=TabularDatasetFactory.from_delimited_files(path=path_url)
-    dataset=pd.read_csv(ds)
+    #path_url="https://raw.githubusercontent.com/Ankita03-dell/AZMLND_Capstone_Trial1/main/heart_failure_clinical_records_dataset.csv"
+    #ds=TabularDatasetFactory.from_delimited_files(path=path_url)
+    dataset=pd.read_csv('heart_failure_clinical_records_dataset.csv)
     x = dataset[['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes', 'ejection_fraction', 'high_blood_pressure', 'platelets', 'serum_creatinine', 'serum_sodium', 'sex', 'smoking', 'time']]
     y = dataset[['DEATH_EVENT']]
     #x= ds.drop('DEATH_EVENT', axis=1)
