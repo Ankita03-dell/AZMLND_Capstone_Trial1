@@ -9,6 +9,27 @@ from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
 from azureml.core.run import Run
 
+dataset=pd.read_csv(heart_failure_clinical_records_dataset.csv)
+
+# Preview of  first five rows
+dataset.head()
+
+# Exploring data
+dataset.describe()
+
+# Data columns
+dataset.columns = ['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes', 'ejection_fraction', 'high_blood_pressure', 'platelets', 'serum_creatinine', 'serum_sodium', 'sex', 'smoking', 'time', 'DEATH_EVENT']
+x = dataset[['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes', 'ejection_fraction', 'high_blood_pressure', 'platelets', 'serum_creatinine', 'serum_sodium', 'sex', 'smoking', 'time']]
+y = dataset[['DEATH_EVENT']]
+
+# Split data into train and test sets.
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
+
+data_train_test = {"train_set": {"X": x_train, "y": y_train},
+        "test_set": {"X": x_test, "y": y_test}}
+
+run = Run.get_context()
+
 def main():
     # Add arguments to script
     parser = argparse.ArgumentParser()
@@ -18,21 +39,14 @@ def main():
 
     args = parser.parse_args()
     
-    ds=pd.read_csv(heart_failure_clinical_records_dataset.csv)
     
-    x= ds.drop('DEATH_EVENT', axis=1)
-    y= ds['DEATH_EVENT']
-    
-    #Splitted data into train and test sets
-    x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.33)
-    
-    run = Run.get_context()
     run.log("Regularization Strength:", np.float(args.C))
     run.log("Max iterations:", np.int(args.max_iter))
 
     model = LogisticRegression(C=args.C, max_iter=args.max_iter).fit(x_train, y_train)
     
-    joblib.dump(value=model, filename= './outputs/model.joblib')
+    os.makedirs('outputs', exist_ok=True)
+    joblib.dump(value=model, filename= 'outputs/model.pk1')
     
 
     accuracy = model.score(x_test, y_test)
