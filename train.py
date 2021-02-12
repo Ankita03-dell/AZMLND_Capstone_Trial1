@@ -25,8 +25,8 @@ def main():
     path_url="https://raw.githubusercontent.com/Ankita03-dell/AZMLND_Capstone_Trial1/main/heart_failure_clinical_records_dataset.csv"
     ds=TabularDatasetFactory.from_delimited_files(path=path_url)
     
-    x= data.drop('DEATH_EVENT', axis=1)
-    y= data['DEATH_EVENT']
+    x= ds.drop('DEATH_EVENT', axis=1)
+    y= ds['DEATH_EVENT']
  
     #Split data into train and test sets
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33,random_state=0)  
